@@ -1,3 +1,5 @@
+#!/bin/bash
+
 hostnamectl set-hostname ${server-name}
 yum update -y
 amazon-linux-extras install docker -y
