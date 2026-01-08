@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = ">= 1.5.0"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = ">= 5.0"
     }
   }
 }
@@ -16,10 +16,21 @@ provider "aws" {
 module "docker_instance" {
   source = "../.."
 
-  key_name              = "KeyPair"
-  instance_type         = "t3.micro"
-  num_of_instance       = 1
-  tag                   = "example-docker-instance"
-  server-name           = "example-docker"
-  docker-instance-ports = [22, 80, 8080]
+  name          = "example-docker"
+  instance_type = "t3.micro"
+  key_name      = "my-keypair" # Replace with your key pair name
+
+  ingress_ports = [22, 80, 443]
+
+  tags = {
+    Environment = "example"
+  }
+}
+
+output "instance_public_ip" {
+  value = module.docker_instance.instance_public_ips
+}
+
+output "instance_id" {
+  value = module.docker_instance.instance_ids
 }
